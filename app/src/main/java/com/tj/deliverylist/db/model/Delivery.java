@@ -62,4 +62,5 @@ public class Delivery {
     public void setLocation(@NonNull Location location) {
         this.location = location;
     }
+
 }

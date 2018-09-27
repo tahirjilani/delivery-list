@@ -1,42 +1,76 @@
 package com.tj.deliverylist.activities;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.widget.Toast;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 
 import com.tj.deliverylist.App;
 import com.tj.deliverylist.R;
-import com.tj.deliverylist.db.model.Delivery;
+import com.tj.deliverylist.adapter.DeliveryAdapter;
+import com.tj.deliverylist.databinding.DeliveriesActivityBinding;
+import com.tj.deliverylist.net.NetworkState;
+import com.tj.deliverylist.utils.Utils;
 import com.tj.deliverylist.vm.DeliveriesViewModel;
 import com.tj.deliverylist.vm.ViewModelFactory;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
 public class DeliveriesActivity extends AppCompatActivity {
 
-    private DeliveriesViewModel viewModel;
+    private final String TAG = this.getClass().getSimpleName();
+
     @Inject
     ViewModelFactory viewModelFactory;
+
+    private DeliveriesActivityBinding binding;
+    private DeliveriesViewModel viewModel;
+    private DeliveryAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_deliveries);
+
         App.getInstance().getAppComponent().inject(this);
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(DeliveriesViewModel.class);
-        viewModel.init();
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_deliveries);
 
-        viewModel.getDeliveryData().observe(this, new Observer<List<Delivery>>() {
-            @Override
-            public void onChanged(@Nullable List<Delivery> deliveries) {
-                Toast.makeText(DeliveriesActivity.this, "Data: " + deliveries.size(), Toast.LENGTH_SHORT).show(); deliveries.size();
-            }
+        //ViewModelFactory to facilitate ViewModel injection
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(DeliveriesViewModel.class);
+
+        //Erase data from db to force paging library to fetch latest
+        binding.swipeRefreshLayout.setOnRefreshListener(() -> viewModel.refreshData());
+
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        adapter = new DeliveryAdapter();
+
+        //Submit new data pages to adapter
+        viewModel.getDeliveryData().observe(this, deliveries -> adapter.submitList(deliveries));
+
+        //We update adapter ui w.r.t network sate. Show error in case
+        viewModel.getNetworkCallState().observe(this, o -> {
+            handleNetworkState(o);
         });
+
+        binding.recyclerView.setAdapter(adapter);
+
+    }
+
+    private void handleNetworkState(Object o){
+
+        NetworkState networkState = (NetworkState)o;
+        if(networkState == NetworkState.LOADING || networkState == NetworkState.DONE){
+            adapter.setNetworkState(networkState);
+        }else {
+            Utils.retryAlert(this,
+                    "Error",
+                    networkState.getMessage(),
+                    (dialog, which) -> viewModel.retry(adapter.getLastDelivery()));
+        }
+        if (networkState == NetworkState.DONE || networkState.getStatus() == NetworkState.Status.STATE_FAILED){
+            binding.swipeRefreshLayout.setRefreshing(false);
+        }
     }
 }

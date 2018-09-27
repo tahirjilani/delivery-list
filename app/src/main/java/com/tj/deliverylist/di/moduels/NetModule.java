@@ -1,8 +1,6 @@
 package com.tj.deliverylist.di.moduels;
 
 
-import android.content.Context;
-
 import com.google.gson.Gson;
 import com.tj.deliverylist.App;
 import com.tj.deliverylist.BuildConfig;

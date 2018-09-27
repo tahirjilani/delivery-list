@@ -1,6 +1,7 @@
 package com.tj.deliverylist.db;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.paging.DataSource;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
@@ -25,4 +26,9 @@ public interface DeliveryDao {
 
     @Query("DELETE FROM delivery_table")
     void deleteAll();
+
+    // The Integer type parameter tells Room to use a PositionalDataSource object, with position-based loading under the hood.
+    @Query("SELECT * FROM delivery_table ORDER BY id ASC")
+    DataSource.Factory<Integer, Delivery> deliveriesById();
+
 }
