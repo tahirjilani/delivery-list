@@ -1,6 +1,9 @@
 <resources>
-    <string name="app_name">DeliveryList</string>
+    <string name="app_name">Delivery List</string>
+    <string name="things_to_deliver">Things to Deliver</string>
+    <string name="delivery_details">Delivery Details</string>
     <string name="ok">OK</string>
     <string name="retry">Retry</string>
     <string name="cancel">Cancel</string>
+    <string name="title_activity_delivery_map">Map</string>
 </resources>

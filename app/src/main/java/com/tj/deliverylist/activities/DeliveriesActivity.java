@@ -35,6 +35,8 @@ public class DeliveriesActivity extends AppCompatActivity {
         App.getInstance().getAppComponent().inject(this);
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_deliveries);
+        setSupportActionBar(binding.myToolbar);
+        binding.toolbarTitle.setText(R.string.things_to_deliver);
 
         //ViewModelFactory to facilitate ViewModel injection
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(DeliveriesViewModel.class);
@@ -44,7 +46,7 @@ public class DeliveriesActivity extends AppCompatActivity {
 
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new DeliveryAdapter();
+        adapter = new DeliveryAdapter(this);
 
         //Submit new data pages to adapter
         viewModel.getDeliveryData().observe(this, deliveries -> adapter.submitList(deliveries));

@@ -1,30 +1,35 @@
 package com.tj.deliverylist.adapter;
 
 import android.arch.paging.PagedListAdapter;
+import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.tj.deliverylist.R;
+import com.tj.deliverylist.activities.DeliveryMapActivity;
 import com.tj.deliverylist.databinding.DeliveryItemBinding;
 import com.tj.deliverylist.databinding.LoadingItemBinding;
 import com.tj.deliverylist.db.model.Delivery;
 import com.tj.deliverylist.net.NetworkState;
 
-public class DeliveryAdapter extends PagedListAdapter<Delivery, RecyclerView.ViewHolder> {
+public class DeliveryAdapter extends PagedListAdapter<Delivery, RecyclerView.ViewHolder> implements View.OnClickListener{
 
     private static final int TYPE_PROGRESS_ITEM = 0;
     private static final int TYPE_DELIVERY_ITEM = 1;
 
     private NetworkState networkState;
+    private Context context;
 
-
-    public DeliveryAdapter() {
+    public DeliveryAdapter(Context context) {
         super(DIFF_CALLBACK);
+        this.context = context;
     }
 
     @NonNull
@@ -58,7 +63,7 @@ public class DeliveryAdapter extends PagedListAdapter<Delivery, RecyclerView.Vie
     }
 
 
-    public static class DeliveryItemViewHolder extends RecyclerView.ViewHolder {
+    private class DeliveryItemViewHolder extends RecyclerView.ViewHolder {
 
         private DeliveryItemBinding binding;
         public DeliveryItemViewHolder(DeliveryItemBinding binding) {
@@ -73,7 +78,10 @@ public class DeliveryAdapter extends PagedListAdapter<Delivery, RecyclerView.Vie
                     .error(R.drawable.ic_image_black_24dp)
                     .into(binding.imageView);
 
-            binding.descriptionTv.setText(delivery.getId()+ " "+ delivery.getDescription() + " at " + delivery.getLocation().getAddress());
+            binding.descriptionTv.setText(delivery.getDescription() + " at " + delivery.getLocation().getAddress());
+
+            binding.getRoot().setTag(delivery);
+            binding.getRoot().setOnClickListener(DeliveryAdapter.this);
         }
     }
 
@@ -156,5 +164,16 @@ public class DeliveryAdapter extends PagedListAdapter<Delivery, RecyclerView.Vie
             d = getItem(getItemCount() - 1);
         }
         return d;
+    }
+
+    @Override
+    public void onClick(View v) {
+        Object o = v.getTag();
+        if (o != null && o instanceof Delivery){
+            Delivery d = (Delivery) o;
+            Intent i = new Intent(context, DeliveryMapActivity.class);
+            i.putExtra("id", d.getId());
+            context.startActivity(i);
+        }
     }
 }

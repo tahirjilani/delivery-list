@@ -99,7 +99,7 @@ public class DeliveryRepository {
     }
 
     private void saveDeliveries(final List<Delivery> deliveries){
-        this.appExecutors.networkIO().execute(new Runnable() {
+        this.appExecutors.diskIO().execute(new Runnable() {
             @Override
             public void run() {
                 deliveryDao.insert(deliveries);
@@ -126,5 +126,19 @@ public class DeliveryRepository {
 
     public void retryLastApiCall(Delivery d){
         boundaryCallback.onItemAtEndLoaded(d);
+    }
+
+
+    public MutableLiveData<Delivery> getDeliveryById(final Integer id) {
+
+        MutableLiveData<Delivery> delivery = new MutableLiveData();
+        this.appExecutors.diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                Delivery d = deliveryDao.getDeliveryById(id);
+                delivery.postValue(d);
+            }
+        });
+        return delivery;
     }
 }

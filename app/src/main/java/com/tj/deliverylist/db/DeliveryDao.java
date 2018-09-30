@@ -1,6 +1,7 @@
 package com.tj.deliverylist.db;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
 import android.arch.paging.DataSource;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
@@ -31,4 +32,6 @@ public interface DeliveryDao {
     @Query("SELECT * FROM delivery_table ORDER BY id ASC")
     DataSource.Factory<Integer, Delivery> deliveriesById();
 
+    @Query("SELECT * FROM delivery_table WHERE id = :id")
+    Delivery getDeliveryById(Integer id);
 }

@@ -1,6 +1,7 @@
 package com.tj.deliverylist.di;
 
 import com.tj.deliverylist.activities.DeliveriesActivity;
+import com.tj.deliverylist.activities.DeliveryMapActivity;
 import com.tj.deliverylist.di.moduels.AppModule;
 import com.tj.deliverylist.di.moduels.DeliveryRepositoryModule;
 import com.tj.deliverylist.di.moduels.DeliveryRoomDatabaseModule;
@@ -16,5 +17,6 @@ import dagger.Component;
 public interface AppComponent {
 
     void inject(DeliveriesActivity activity);
+    void inject(DeliveryMapActivity activity);
 
 }

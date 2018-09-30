@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 
 import com.tj.deliverylist.vm.DeliveriesViewModel;
+import com.tj.deliverylist.vm.DeliveryMapViewModel;
 import com.tj.deliverylist.vm.ViewModelFactory;
 import com.tj.deliverylist.vm.ViewModelKey;
 
@@ -21,6 +22,10 @@ public abstract class ViewModelModule {
     @Binds
     @IntoMap
     @ViewModelKey(DeliveriesViewModel.class)
-    abstract ViewModel userViewModel(DeliveriesViewModel userViewModel);
+    abstract ViewModel deliveriesViewModel(DeliveriesViewModel userViewModel);
 
+    @Binds
+    @IntoMap
+    @ViewModelKey(DeliveryMapViewModel.class)
+    abstract ViewModel deliveryMapViewModel(DeliveryMapViewModel deliveryMapViewModel);
 }
