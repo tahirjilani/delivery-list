@@ -22,10 +22,10 @@ public abstract class ViewModelModule {
     @Binds
     @IntoMap
     @ViewModelKey(DeliveriesViewModel.class)
-    abstract ViewModel deliveriesViewModel(DeliveriesViewModel userViewModel);
+    abstract ViewModel deliveriesViewModel(DeliveriesViewModel viewModel);
 
     @Binds
     @IntoMap
     @ViewModelKey(DeliveryMapViewModel.class)
-    abstract ViewModel deliveryMapViewModel(DeliveryMapViewModel deliveryMapViewModel);
+    abstract ViewModel deliveryMapViewModel(DeliveryMapViewModel viewModel);
 }
