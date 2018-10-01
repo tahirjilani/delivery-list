@@ -1,6 +1,7 @@
 package com.tj.deliverylist.activities;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -48,9 +49,12 @@ public class DeliveryMapActivity extends AppCompatActivity implements OnMapReady
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
 
     /**
      * Manipulates the map once available.

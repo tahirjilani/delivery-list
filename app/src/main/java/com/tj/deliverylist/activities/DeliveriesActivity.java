@@ -1,6 +1,7 @@
 package com.tj.deliverylist.activities;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -58,6 +59,11 @@ public class DeliveriesActivity extends AppCompatActivity {
 
         binding.recyclerView.setAdapter(adapter);
 
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
     }
 
     private void handleNetworkState(Object o){

@@ -22,7 +22,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activities.DeliveriesActivity"
-            android:label="@string/things_to_deliver">
+            android:configChanges="orientation|screenSize">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -43,7 +44,7 @@
 
         <activity
             android:name=".activities.DeliveryMapActivity"
-            android:label="@string/title_activity_delivery_map"></activity>
+            android:configChanges="orientation|screenSize"/>
     </application>
 
 </manifest>
